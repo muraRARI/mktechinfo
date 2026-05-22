@@ -1,0 +1,428 @@
+﻿@{
+    Layout = "~/Views/Shared/Superadmin/_SuperadminLayout.cshtml";
+    ViewData["Title"] = "Create Blog";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin</title>
+
+    <!-- Quill Editor Styles & Scripts -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen pb-32">
+
+    <div class="max-w-7xl mx-auto p-4 lg:p-8">
+
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Create Blog Post</h1>
+            <div class="flex items-center gap-3">
+                <a href="~/Views/Blog/Index.cshtml" class="text-sm text-indigo-600 hover:underline">Back to list</a>
+            </div>
+        </div>
+
+        <!-- Server & Validation Errors Container -->
+        <div id="serverErrors" class="mb-6 hidden">
+            <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg" role="alert">
+                <strong class="block font-semibold">Submission failed</strong>
+                <ul id="serverErrorsList" class="mt-2 list-disc list-inside text-sm"></ul>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- LEFT SIDEBAR: Title / Content / Images -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- Blog Title Input -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Blog Title
+                    </label>
+                    <input type="text"
+                           id="title"
+                           autocomplete="off"
+                           placeholder="Enter blog title..."
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                </div>
+
+                <!-- Quill Rich Text Editor Container -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="font-semibold text-lg text-gray-800">Blog Content</h2>
+                        <div class="flex items-center gap-3">
+                            <button id="clearBtn" class="text-red-500 hover:text-red-600 text-sm">Clear Content</button>
+                            <button id="pasteHtmlBtn" class="text-sm text-gray-600 hover:underline">Paste HTML</button>
+                        </div>
+                    </div>
+                    <div id="editor" class="h-96 bg-white border border-gray-100 rounded-lg"></div>
+                </div>
+
+                <!-- Image Upload Previewer with Native Validation Alerts -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="font-semibold text-lg text-gray-800">Upload Images</h2>
+                        <span class="text-sm text-gray-500">PNG, JPG (Max 5MB)</span>
+                    </div>
+
+                    <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-indigo-500 transition">
+                        <input type="file" id="imageUpload" multiple accept="image/jpeg, image/png" class="hidden" />
+                        <button onclick="document.getElementById('imageUpload').click()" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">
+                            Select Images
+                        </button>
+                        <p class="text-gray-500 text-sm mt-3">Upload at least one thumbnail image to publish your post.</p>
+                    </div>
+
+                    <div id="previewContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDEBAR: Settings Engine -->
+            <div class="space-y-6">
+
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <h2 class="text-lg font-bold text-gray-800 mb-5">Blog Settings</h2>
+
+                    <!-- Category Dropdown Selection -->
+                    <div class="mb-5">
+                        <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                        <select id="category" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Loading categories...</option>
+                        </select>
+                    </div>
+
+                    <!-- Meta Tags Engine Input -->
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tags</label>
+                        <div class="flex gap-2 mb-3">
+                            <input type="text" id="tagInput" placeholder="Add a tag..." class="flex-1 px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                            <button type="button" id="addTagBtn" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium text-sm transition">Add</button>
+                        </div>
+                        <div id="tagsContainer" class="flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <!-- SEO Short Description Field -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-gray-700">SEO Description</label>
+                            <span id="seoCount" class="text-xs text-gray-400">0/160</span>
+                        </div>
+                        <textarea id="seo" rows="4" maxlength="160" placeholder="Enter SEO description..." class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Main Action Panels -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex flex-col gap-3">
+                        <button id="draftBtn" type="button" class="w-full px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl font-medium transition">Save Draft</button>
+                        <button id="publishBtn" type="button" class="w-full px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition">Publish Blog</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- CLEANED UP FOOTER: Removed the duplicate buttons. Now it only tracks information status. -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-sm text-gray-500 font-medium">Form Editor Workspace — Changes are validated locally before submission</div>
+            <div class="text-xs text-gray-400">Quill engine online</div>
+        </div>
+    </div>
+
+    <!-- Application Script Block Logic Engine -->
+    <script>
+        // Initialize Quill rich text editor
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Write your blog content here...',
+            modules: {
+                toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['link', 'image'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Track SEO Character counter dynamic updating
+        const seoInput = document.getElementById('seo');
+        const seoCount = document.getElementById('seoCount');
+        seoInput.addEventListener('input', function () {
+            seoCount.innerText = `${this.value.length}/160`;
+        });
+
+        // Setup local media file layout stream previews with client-side type/size validation
+        const imageUpload = document.getElementById('imageUpload');
+        const previewContainer = document.getElementById('previewContainer');
+
+        imageUpload.addEventListener('change', function (event) {
+            previewContainer.innerHTML = '';
+            const files = event.target.files;
+            const uploadErrors = [];
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // 1. File Type Validation
+                if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+                    uploadErrors.push(`"${file.name}" rejected: Only JPG and PNG image types are allowed.`);
+                    continue;
+                }
+
+                // 2. File Size Validation (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    uploadErrors.push(`"${file.name}" rejected: File size exceeds the 5MB maximum limit.`);
+                    continue;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const div = document.createElement('div');
+                    div.className = 'relative rounded-2xl overflow-hidden border border-gray-200 shadow-sm group';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-40 object-cover blog-preview-img" />
+                    `;
+                    previewContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            if (uploadErrors.length > 0) {
+                showServerErrors(uploadErrors);
+                imageUpload.value = ''; // Reset file input
+            }
+        });
+
+        // Clear layout canvas helper action
+        document.getElementById('clearBtn').addEventListener('click', function () {
+            quill.setText('');
+        });
+
+        // Fast markup text injection engine context
+        document.getElementById('pasteHtmlBtn').addEventListener('click', async function () {
+            try {
+                const text = await navigator.clipboard.readText();
+                quill.clipboard.dangerouslyPasteHTML(quill.getLength()-1, text);
+            } catch (e) {
+                alert('Unable to read clipboard content.');
+            }
+        });
+
+        // Custom tags pill rendering array engine
+        const tagInput = document.getElementById('tagInput');
+        const addTagBtn = document.getElementById('addTagBtn');
+        const tagsContainer = document.getElementById('tagsContainer');
+        let tagsList = [];
+
+        function renderTags() {
+            tagsContainer.innerHTML = '';
+            tagsList.forEach((tag, index) => {
+                const pill = document.createElement('span');
+                pill.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 font-medium text-sm border border-indigo-100';
+                pill.innerHTML = `
+                    <span>${tag}</span>
+                    <button type="button" data-index="${index}" class="ml-2 hover:text-indigo-900 font-bold focus:outline-none remove-tag">&times;</button>
+                `;
+                tagsContainer.appendChild(pill);
+            });
+
+            document.querySelectorAll('.remove-tag').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.currentTarget.dataset.index, 10);
+                    tagsList.splice(idx, 1);
+                    renderTags();
+                });
+            });
+        }
+
+        function handleAddTag() {
+            const rawValue = tagInput.value.trim();
+            if (rawValue && !tagsList.includes(rawValue)) {
+                tagsList.push(rawValue);
+                tagInput.value = '';
+                renderTags();
+            }
+        }
+
+        addTagBtn.addEventListener('click', handleAddTag);
+        tagInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleAddTag();
+            }
+        });
+
+        renderTags();
+
+        // Async fetch options lookup parsing populate logic
+        async function loadCategories() {
+            const categoryDropdown = document.getElementById('category');
+            try {
+                const response = await fetch('/api/ApiBlogcategory');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const categories = await response.json();
+
+                categoryDropdown.innerHTML = '<option value="">Select a category</option>';
+                categories.forEach(cat => {
+                    if (cat.isActive === true) {
+                        const option = document.createElement('option');
+                        option.value = cat.categoryId;
+                        option.textContent = cat.categoryName;
+                        categoryDropdown.appendChild(option);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                categoryDropdown.innerHTML = '<option value="">Failed to load categories</option>';
+            }
+        }
+        loadCategories();
+
+        // Attach layout actions listeners
+        document.getElementById('draftBtn').addEventListener('click', saveDraft);
+        document.getElementById('publishBtn').addEventListener('click', publishHandler);
+
+        function saveDraft() {
+            alert('Draft saved locally (not sent to API).');
+        }
+
+        // Error message renderer panel controller
+        function showServerErrors(items) {
+            const container = document.getElementById('serverErrors');
+            const list = document.getElementById('serverErrorsList');
+            list.innerHTML = '';
+            if (!items || items.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+            items.forEach(it => {
+                const li = document.createElement('li');
+                li.textContent = it;
+                list.appendChild(li);
+            });
+            container.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Normalize distinct backend layout payload models validation shapes response
+        function normalizeErrors(result) {
+            if (result && result.errors && typeof result.errors === 'object' && !Array.isArray(result.errors)) {
+                const out = [];
+                for (const key of Object.keys(result.errors)) {
+                    const val = result.errors[key];
+                    if (Array.isArray(val)) {
+                        val.forEach(v => out.push(`${key}: ${v}`));
+                    } else {
+                        out.push(`${key}: ${val}`);
+                    }
+                }
+                return out;
+            }
+
+            if (result && Array.isArray(result.errors)) {
+                return result.errors.map(e => typeof e === 'string' ? e : JSON.stringify(e));
+            }
+
+            if (result && result.message) return [result.message];
+            if (result && result.Message) return [result.Message];
+
+            return ['Unknown error occurred.'];
+        }
+
+        // Primary API publish click pipeline handler submission controller logic
+        async function publishHandler() {
+            const titleValue = document.getElementById('title').value.trim();
+            const seoValue = document.getElementById('seo').value.trim();
+            const categoryValue = document.getElementById('category').value;
+            const contentHtml = quill.root.innerHTML;
+
+            // Look for previews to extract image strings
+            const selectedImage = previewContainer.querySelector('.blog-preview-img');
+
+            // Client UI field validations checks parsing
+            const localErrors = [];
+            if (!titleValue) localErrors.push('Title is required.');
+            if (quill.getText().trim().length === 0) localErrors.push('Content is required.');
+            if (!seoValue) localErrors.push('Short description is recommended.');
+            if (!categoryValue) localErrors.push('Category is required.');
+
+            // 3. Mandatory Cover Image Validation check
+            if (!selectedImage) {
+                localErrors.push('Cover Image is required. Please select a valid thumbnail image.');
+            }
+
+            if (localErrors.length > 0) {
+                showServerErrors(localErrors);
+                return;
+            } else {
+                showServerErrors([]);
+            }
+
+            // Key layout configurations variables set up into accurate camelCase mapping matches
+            const payload = {
+                title: titleValue,
+                shortDescription: seoValue || "No description provided",
+                content: contentHtml,
+                categoryId: parseInt(categoryValue, 10),
+                imageUrl: selectedImage.src,
+                tags: tagsList
+            };
+
+            const publishBtn = document.getElementById('publishBtn');
+            const originalText = publishBtn.textContent;
+
+            publishBtn.disabled = true;
+            publishBtn.textContent = 'Publishing...';
+
+            try {
+                const response = await fetch('/api/BlogApi/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                let result = {};
+                try {
+                    result = await response.json();
+                } catch (e) {
+                    result = { message: 'Invalid JSON response from server.' };
+                }
+
+                if (response.ok && (result.success || result.id || result.Id)) {
+                    alert('Blog published successfully!');
+
+                    // Clear out layout elements content
+                    document.getElementById('title').value = '';
+                    document.getElementById('seo').value = '';
+                    document.getElementById('category').value = '';
+                    quill.setText('');
+                    tagsList = [];
+                    renderTags();
+                    previewContainer.innerHTML = '';
+                    document.getElementById('seoCount').innerText = '0/160';
+                    showServerErrors([]);
+                } else {
+                    const errs = normalizeErrors(result);
+                    showServerErrors(errs);
+                }
+            } catch (error) {
+                console.error('Network error occurred:', error);
+                showServerErrors([error.message || 'Network link disconnect error occurred.']);
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.textContent = originalText;
+            }
+        }
+    </script>
+</body>
+</html>

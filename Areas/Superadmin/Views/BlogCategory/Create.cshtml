@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Category Management</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for clean iconography -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 for modern popup alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header Panel -->
+        <div class="flex justify-between items-center bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Blog Categories</h1>
+                <p class="text-sm text-gray-500 mt-1">Manage and organize your portal's blog taxonomies</p>
+            </div>
+            <button id="btnOpenModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition shadow-sm flex items-center gap-2">
+                <i class="fa-solid fa-plus"></i> Add New Category
+            </button>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-4">ID</th>
+                            <th class="px-6 py-4">Category Name / Slug</th>
+                            <th class="px-6 py-4">Description</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoryTableBody" class="divide-y divide-gray-100 text-sm text-gray-600">
+                        <!-- Dynamic content will load here -->
+                        <tr>
+                            <td colspan="5" class="px-6 py-10 text-center text-gray-400">
+                                <i class="fa-solid fa-circle-notch animate-spin text-xl mr-2"></i> Fetching categories...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide-over Modal Backdrop -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity opacity-0"></div>
+
+    <!-- Slide-over Modal Panel -->
+    <div id="categoryModal" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-800">Create Blog Category</h3>
+            <button id="btnCloseModal" class="text-gray-400 hover:text-gray-600 text-xl p-1"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Interactive Form -->
+        <form id="categoryForm" class="p-6 flex-1 flex flex-col justify-between overflow-y-auto">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-2">Category Name</label>
+                    <input type="text" id="categoryName" required placeholder="e.g. Artificial Intelligence"
+                           class="w-full px-3.5 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 text-sm placeholder:text-gray-400">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-2">Description</label>
+                    <textarea id="description" rows="4" placeholder="Brief summary describing this category..."
+                              class="w-full px-3.5 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 text-sm placeholder:text-gray-400"></textarea>
+                </div>
+
+                <div class="flex items-center gap-3 bg-gray-50 p-3.5 rounded-lg border border-gray-100">
+                    <input type="checkbox" id="isActive" checked class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="isActive" class="text-sm font-medium text-gray-700 select-none cursor-pointer">Mark category as Active</label>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-gray-100 flex gap-3">
+                <button type="button" id="btnCancel" class="w-1/3 border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-lg font-medium text-sm transition">Cancel</button>
+                <button type="submit" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-medium text-sm transition shadow-sm flex justify-center items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Category
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- jQuery Hookup -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        // Update this pointing to your API endpoint
+        const API_BASE_URL = '/api/ApiBlogcategory';
+
+        $(document).ready(function () {
+            loadCategories();
+
+            // Modal Controls
+            $('#btnOpenModal').on('click', openModal);
+            $('#btnCloseModal, #btnCancel, #modalBackdrop').on('click', closeModal);
+
+            // Form Submit Event
+            $('#categoryForm').on('submit', function (e) {
+                e.preventDefault();
+                submitCategory();
+            });
+        });
+
+        // Fetch and Render categories
+        function loadCategories() {
+            $.ajax({
+                url: API_BASE_URL,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    let rows = '';
+                    if (!data || data.length === 0) {
+                        rows = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">No blog categories found.</td></tr>`;
+                    } else {
+                        data.forEach(item => {
+                            const statusBadge = item.isActive
+                                ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">Active</span>`
+                                : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200">Inactive</span>`;
+
+                            const formattedDate = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
+
+                            rows += `
+                                <tr class="hover:bg-gray-50/70 transition">
+                                    <td class="px-6 py-4 font-medium text-gray-900">${item.categoryId}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium text-gray-800">${escapeHtml(item.categoryName)}</div>
+                                        <div class="text-xs text-gray-400 mt-0.5 font-mono">/${item.slug}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-500 max-w-xs truncate">${escapeHtml(item.description || '—')}</td>
+                                    <td class="px-6 py-4">${statusBadge}</td>
+                                    <td class="px-6 py-4 text-gray-400 text-xs">${formattedDate}</td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $('#categoryTableBody').html(rows);
+                },
+                error: function () {
+                    $('#categoryTableBody').html(`<tr><td colspan="5" class="px-6 py-8 text-center text-red-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to retrieve categories.</td></tr>`);
+                }
+            });
+        }
+
+        // Post object to API
+        function submitCategory() {
+            const payload = {
+                categoryName: $('#categoryName').val().trim(),
+                description: $('#description').val().trim(),
+                isActive: $('#isActive').is(':checked')
+            };
+
+            // Loading overlay state
+            Swal.fire({
+                title: 'Saving...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            $.ajax({
+                url: API_BASE_URL,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: function (response) {
+                    Swal.close();
+                    closeModal();
+
+                    // Show custom beautiful sweetalert success
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message || 'Category created safely.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    loadCategories(); // reload UI layout instantly
+                },
+                error: function (xhr) {
+                    Swal.close();
+
+                    // Safely intercept bad request response data from API
+                    let errorMessage = "Something went wrong while processing your request.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+
+                    // Elegant error alert checking duplicate
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: errorMessage,
+                        confirmButtonColor: '#4f46e5'
+                    });
+                }
+            });
+        }
+
+        // Modal animations
+        function openModal() {
+            $('#categoryForm')[0].reset();
+            $('#categoryModal').removeClass('hidden');
+            $('#modalBackdrop').removeClass('hidden');
+            setTimeout(() => {
+                $('#categoryModal').removeClass('translate-x-full');
+                $('#modalBackdrop').removeClass('opacity-0').addClass('opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            $('#categoryModal').addClass('translate-x-full');
+            $('#modalBackdrop').removeClass('opacity-100').addClass('opacity-0');
+            setTimeout(() => {
+                $('#categoryModal').addClass('hidden');
+                $('#modalBackdrop').addClass('hidden');
+            }, 300);
+        }
+
+        function escapeHtml(str) {
+            return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") : '';
+        }
+    </script>
+</body>
+</html>

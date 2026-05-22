@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infotech MKTechWorld | Professional Blue Edition</title>
+    <!-- Tailwind CSS & Bootstrap Icons CDN (Required for styles/icons to work) -->
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Custom scrollbar for the sidebar */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #1e40af;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900 min-h-screen text-white flex">
+
+    <!-- ================= SIDE NAVBAR ================= -->
+    <aside id="side-nav" class="fixed top-24 left-0 h-screen w-72 bg-blue-950 border-r border-blue-800 z-50 transition-transform duration-300 ease-in-out flex flex-col justify-between shadow-2xl">
+
+        <div class="sidebar-scroll overflow-y-auto flex-1">
+            <!-- LOGO HEADER -->
+            <div class="flex items-center justify-between p-6 border-b border-blue-800 h-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 p-2 rounded-xl shrink-0">
+                        <img src="~/images/Logo.png" alt="Logo" class="h-6 w-6" />
+                    </div>
+                    <span class="font-extrabold text-lg tracking-tight">
+                        Infotech <span class="text-blue-300 block text-sm font-semibold">MKTechWorld</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- NAVIGATION LINKS -->
+            <nav class="p-4">
+                <ul class="space-y-2 font-semibold text-blue-100">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-800/60 hover:text-white transition-all duration-200">
+                            <i class="bi bi-house-door text-lg text-blue-400"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Aboutus" asp-action="Index" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-800/60 hover:text-white transition-all duration-200">
+                            <i class="bi bi-info-circle text-lg text-blue-400"></i>
+                            <span>About</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Blog" asp-action="Index" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-800/60 hover:text-white transition-all duration-200">
+                            <i class="bi bi-journal-text text-lg text-blue-400"></i>
+                            <span>Blog</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Contactus" asp-action="Index" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-800/60 hover:text-white transition-all duration-200">
+                            <i class="bi bi-envelope text-lg text-blue-400"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                    <li class="pt-4 mt-4 border-t border-blue-900">
+                        <a asp-controller="Auth" asp-action="Login" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition-all duration-200 shadow-lg shadow-blue-600/20">
+                            <i class="bi bi-box-arrow-in-right text-lg"></i>
+                            <span>Login / Signup</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- SIDEBAR FOOTER (CONTACT INFO) -->
+        <div class="p-4 border-t border-blue-800 bg-blue-950/50 text-xs text-blue-200 space-y-2">
+            <div class="flex items-center gap-2">
+                <i class="bi bi-geo-alt text-blue-400"></i>
+                <span>Bihar Darbhanga</span>
+            </div>
+            <a href="tel:+917903980883" class="flex items-center gap-2 hover:text-white transition-colors">
+                <i class="bi bi-telephone text-blue-400"></i>
+                <span>+91 7903980883</span>
+            </a>
+            <a href="mailto:mkinfotechsolution@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors block truncate">
+                <i class="bi bi-envelope text-blue-400"></i>
+                <span>mkinfotechsolution@gmail.com</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= PERSISTENT TOGGLE BUTTON (<>) ================= -->
+    <button id="menu-toggle" class="fixed top-24 left-5 z-50 p-3 bg-blue-600 hover:bg-blue-500 rounded-xl text-white font-mono font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-1 min-w-[50px]" aria-label="Toggle Navigation">
+        &lt;&gt;
+    </button>
+
+    <!-- ================= BACKGROUND OVERLAY (For Mobile Views) ================= -->
+    <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity"></div>
+
+    <!-- ================= MAIN CONTENT CONTAINER ================= -->
+    <!-- The padding-left changes dynamically via JS based on sidebar state -->
+    <main id="main-content" class="flex-1 min-h-screen transition-all duration-300 ease-in-out pl-72 p-8 pt-24">
+
+        <!-- YOUR MAIN SITE CONTENT GOES HERE -->
+        <div class="max-w-4xl">
+            <h1 class="text-4xl font-extrabold mb-4">Welcome to Infotech MKTechWorld</h1>
+            <p class="text-blue-200 leading-relaxed">
+                This layout now features a highly interactive and professional Sidebar Navigation.
+                Click the <code class="bg-blue-900/50 px-2 py-1 rounded text-blue-300">&lt;&gt;</code> button in the top left corner to collapse or expand the navigation dynamically!
+            </p>
+        </div>
+
+    </main>
+
+    <!-- ================= SCRIPT ================= -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const sideNav = document.getElementById('side-nav');
+        const mainContent = document.getElementById('main-content');
+        const overlay = document.getElementById('overlay');
+
+        // Check window size to handle responsive behaviors
+        function isMobile() {
+            return window.innerWidth < 1024; // Tailwind's lg breakpoint
+        }
+
+        function toggleMenu() {
+            const isCollapsed = sideNav.classList.contains('-translate-x-full');
+
+            if (isCollapsed) {
+                // Open Sidebar
+                sideNav.classList.remove('-translate-x-full');
+                menuToggle.style.left = "305px"; // Move button next to open sidebar
+
+                if (isMobile()) {
+                    overlay.classList.remove('hidden');
+                } else {
+                    mainContent.classList.add('pl-72'); // Push content right on desktop
+                }
+            } else {
+                // Close/Collapse Sidebar
+                sideNav.classList.add('-translate-x-full');
+                menuToggle.style.left = "20px"; // Reset button back to corner
+                overlay.classList.add('hidden');
+                mainContent.classList.remove('pl-72'); // Give main content full width
+            }
+        }
+
+        // Handle window resizing events seamlessly
+        function handleResize() {
+            if (isMobile()) {
+                sideNav.classList.add('-translate-x-full');
+                menuToggle.style.left = "20px";
+                mainContent.classList.remove('pl-72');
+                overlay.classList.add('hidden');
+            } else {
+                sideNav.classList.remove('-translate-x-full');
+                menuToggle.style.left = "305px";
+                mainContent.classList.add('pl-72');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Event Listeners
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+        window.addEventListener('resize', handleResize);
+
+        // Initial trigger to position button accurately on page load
+        handleResize();
+    </script>
+
+</body>
+</html>

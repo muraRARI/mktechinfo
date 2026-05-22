@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+
+
+<div class="min-h-screen flex flex-col md:flex-row bg-gray-50">
+
+    <!-- LEFT SIDE -->
+    <div class="w-full h-48 md:h-auto md:w-1/2 relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
+             class="w-full h-full object-cover" />
+
+        <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/60 via-indigo-900/20 to-transparent"></div>
+
+        <div class="hidden md:block absolute bottom-12 left-12 text-white z-10 max-w-md">
+            <h1 class="text-4xl font-bold mb-2">Welcome Back</h1>
+            <p class="text-sm text-gray-100">
+                Access your secure workspace dashboard instantly.
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
+
+        <div class="w-full max-w-md">
+
+            <!-- Mobile text -->
+            <div class="block md:hidden text-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Welcome Back</h1>
+                <p class="text-sm text-gray-500">Login to continue</p>
+            </div>
+
+            <!-- LOGIN CARD -->
+            <div class="bg-white shadow-2xl rounded-2xl p-8 border border-gray-100">
+
+                <h2 class="text-2xl font-bold text-gray-800">Sign In</h2>
+                <p class="text-sm text-gray-500 mb-6">Enter your credentials</p>
+
+                <form id="loginForm" class="space-y-5">
+
+                    <!-- Email -->
+                    <div>
+                        <label class="text-sm text-gray-600">Email</label>
+                        <input type="email" name="email" required
+                               class="w-full mt-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                               placeholder="you@example.com" />
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="text-sm text-gray-600">Password</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" required
+                                   class="w-full mt-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                   placeholder="••••••••" />
+
+                            <button type="button"
+                                    class="absolute right-3 top-3 text-gray-400"
+                                    onclick="togglePassword()">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember -->
+                    <div class="flex justify-between text-sm">
+                       
+
+                      @*   <a href="/Account/ForgotPassword" class="text-indigo-600">
+                            Forgot password?
+                        </a> *@
+                    </div>
+
+                    <!-- Button -->
+                    <button type="submit"
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg">
+                        Sign In
+                    </button>
+
+                </form>
+               
+                <p class="text-center text-sm text-gray-500 mt-6">
+                    Don’t have an account?
+                    <a href="/Auth/Register" class="text-indigo-600 font-medium">
+                        Signup
+                    </a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        function togglePassword() {
+            var pass = document.getElementById("password");
+            pass.type = pass.type === "password" ? "text" : "password";
+        }
+
+        $("#loginForm").submit(function (e) {
+            e.preventDefault();
+
+            var loginData = {
+                email: $("input[name='email']").val(),
+                password: $("input[name='password']").val()
+            };
+
+            $.ajax({
+
+                // url: "https://localhost:44394/api/ApiAuth/login",
+
+                url: "/api/ApiAuth/login",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(loginData),
+
+                success: function (res) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Login Successful",
+                        text: res.message
+                    }).then(() => {
+
+                        $.ajax({
+
+                            // url: "https://localhost:44394/api/ApiAuth/redirect",
+
+
+                            url: "/api/ApiAuth/redirect",
+                            type: "GET",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            success: function (r) {
+                                window.location.href = r.url;
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Redirect Failed",
+                                    text: "Unable to redirect user"
+                                });
+                            }
+                        });
+
+                    });
+                },
+
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Login Failed",
+                        text: xhr.responseJSON?.message || "Invalid credentials"
+                    });
+                }
+            });
+        });
+    </script>
+}

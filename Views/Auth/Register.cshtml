@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "Create an Account";
+}
+
+@* <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4 p-sm-5">
+
+                    <h2 class="card-title text-center fw-bold mb-4">
+                        Create an Account
+                    </h2>
+
+                    <!-- ✅ IMPORTANT: removed action/method + added id -->
+                    <form id="registerForm">
+
+                        <!-- First & Last Name -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="FirstName" class="form-control" placeholder="John" required />
+                                    <label>First Name</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="LastName" class="form-control" placeholder="Doe" required />
+                                    <label>Last Name</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-floating mb-3">
+                            <input type="email" name="Email" class="form-control" placeholder="name@example.com" required />
+                            <label>Email Address</label>
+                        </div>
+
+                        <!-- Mobile -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Mobile Number</label>
+
+                            <div class="input-group">
+                                <select name="CountryCode" class="form-select" style="max-width:110px" required>
+                                    <option value="+91" selected>🇮🇳 +91</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+61">🇦🇺 +61</option>
+                                </select>
+
+                                <input type="tel"
+                                       name="MobileNumber"
+                                       class="form-control"
+                                       placeholder="Mobile Number"
+                                       pattern="[0-9]{7,15}"
+                                       required />
+                            </div>
+                        </div>
+
+                        <!-- Role -->
+                      
+
+                        <!-- Password -->
+                        <div class="form-floating mb-3">
+                            <input type="password" name="Password" class="form-control" required />
+                            <label>Password</label>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-floating mb-4">
+                            <input type="password" name="ConfirmPassword" class="form-control" required />
+                            <label>Confirm Password</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 fs-5">
+                            Sign Up
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <small>
+                            Already have an account?
+                            <a href="/auth/login" class="fw-bold text-decoration-none">Login</a>
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("#registerForm").on("submit", async function (e) {
+                e.preventDefault();
+
+                const password = $("[name='Password']").val();
+                const confirmPassword = $("[name='ConfirmPassword']").val();
+
+                if (password !== confirmPassword) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Password Mismatch",
+                        text: "Passwords do not match!"
+                    });
+                    return;
+                }
+
+                const data = {
+                    firstName: $("[name='FirstName']").val(),
+                    lastName: $("[name='LastName']").val(),
+                    email: $("[name='Email']").val(),
+                    countryCode: $("[name='CountryCode']").val(),
+                    mobileNumber: $("[name='MobileNumber']").val(),
+                    password: password
+                };
+
+                try {
+
+                    const response = await fetch("/api/APiAuth/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Registered Successfully",
+                            text: result.message || "Account created",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = "/auth/login";
+                        }, 2000);
+
+                    } else {
+
+                        let errorMessage = "Something went wrong";
+
+                        if (result.errors) {
+
+                            errorMessage = "";
+
+                            for (const key in result.errors) {
+
+                                errorMessage += `• ${result.errors[key].join("<br/>• ")}<br/>`;
+
+                            }
+
+                        } else if (result.message) {
+
+                            errorMessage = result.message;
+
+                        }
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Registration Failed",
+                            html: errorMessage
+                        });
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Server Error",
+                        text: "Please try again later"
+                    });
+
+                }
+
+            });
+
+        });
+    </script>
+}

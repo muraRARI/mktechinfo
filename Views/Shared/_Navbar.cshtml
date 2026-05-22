@@ -1,0 +1,222 @@
+﻿ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infotech MKTechWorld | Professional Blue Edition</title>
+
+
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+            body.menu-open {
+                overflow: hidden;
+            }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900 min-h-screen text-white">
+
+    <!-- ================= TOP HEADER ================= -->
+    <div class="bg-blue-900 text-blue-100 text-sm border-b border-blue-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-2 flex flex-col md:flex-row items-center justify-between gap-2">
+
+            <div class="flex items-center gap-3">
+                <i class="bi bi-building"></i>
+                Infotech MKTechWorld
+                <span class="hidden md:inline text-blue-400">|</span>
+                <i class="bi bi-geo-alt"></i>
+                Bihar Dharbhanga
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="tel:+917903980883" class="hover:text-white flex items-center gap-2">
+                    <i class="bi bi-telephone"></i>
+                    +91 7903980883
+                </a>
+
+                <a href="mailto:info@mkinfotech.com" class="hover:text-white flex items-center gap-2">
+                    <i class="bi bi-envelope"></i>
+                    mkinfotechsolution@gmail.com
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="bg-blue-950/80 backdrop-blur-md border-b border-blue-800 sticky top-0 z-50">
+       
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+
+                    <div class="bg-blue-600 p-2 rounded-xl">
+                        <img src="~/images/Logo.png" alt="Logo" class="h-6 w-6" />
+                    </div>
+                    <span class="font-extrabold text-xl">
+                        Infotech  <span class="text-blue-300">MKTechWorld</span>
+                    </span>
+                </div>
+
+                <!-- LOGO -->
+                @* <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 p-2 rounded-xl">
+                        <i class="bi bi-shield-check text-xl"></i>
+                        C:\Users\bhave\source\repos\mkinfotech\wwwroot\images\Logo.png
+                    </div>
+                    <span class="font-extrabold text-xl">
+                        MK <span class="text-blue-300">InfoTech</span>
+                    </span>
+                </div> *@
+
+                <!-- DESKTOP MENU -->
+                <ul class="hidden lg:flex gap-8 font-semibold text-blue-100 items-center">
+
+                    <li>
+                        <a asp-controller="Homes" asp-action="Index" class="hover:text-white transition-colors duration-200">
+                            Homes
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Contactus" asp-action="Index" class="hover:text-white transition-colors duration-200">
+                            Contact
+                        </a>
+                    </li>
+                    @* <li><a href="#about" class="hover:text-white">About</a></li> *@
+                    @* <li><a href="#services" class="hover:text-white">Services</a></li> *@
+                    @* <li><a href="#blog" class="hover:text-white">Blog</a></li> *@
+
+                    <li>
+                        <a asp-controller="Blog" asp-action="Index" class="hover:text-white transition-colors duration-200">
+                            Blog
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Aboutus" asp-action="Index" class="hover:text-white transition-colors duration-200">
+                            About
+                        </a>
+                    </li>
+                    <li class="flex gap-3">
+                        <a asp-controller="Auth" asp-action="Login"
+                           class="px-3 py-1 rounded hover:bg-gray-700">
+                            Login & Sign Up
+                        </a>
+
+
+                    </li>
+                    <!-- DROPDOWN -->
+                    @*   <li class="relative group">
+                        <button class="hover:text-white flex items-center gap-1">
+                            More
+                            <i class="bi bi-chevron-down text-sm"></i>
+                        </button>
+
+                        <div class="absolute hidden group-hover:block top-8 left-0 bg-blue-900 border border-blue-700 rounded-xl w-52 shadow-xl">
+                            <a href="#career" class="block px-4 py-3 hover:bg-blue-800">Careers</a>
+                            <a href="#support" class="block px-4 py-3 hover:bg-blue-800">Support</a>
+                            <a href="#privacy" class="block px-4 py-3 hover:bg-blue-800">Privacy Policy</a>
+                        </div>
+                    </li> *@
+
+                </ul>
+
+                <!-- MOBILE BUTTON -->
+                <div class="flex items-center gap-3">
+                   
+
+                    <button id="menu-toggle"
+                            class="lg:hidden p-3 bg-blue-800 rounded-xl text-white text-2xl">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <!-- ================= OVERLAY ================= -->
+    <div id="overlay" class="hidden fixed inset-0 bg-black/60 z-40"></div>
+    <div id="nav-menu"
+         class="fixed top-0 left-0 h-full w-72 bg-blue-950
+         transform -translate-x-full
+         transition-transform duration-500 ease-in-out z-50 shadow-2xl">
+
+        <!-- HEADER -->
+        <div class="flex items-center justify-between p-6 border-b border-blue-800">
+            <span class="text-xl font-bold text-blue-100">Menu</span>
+
+            <button id="close-menu"
+                    class="p-2 rounded-lg hover:bg-blue-800 text-blue-200 hover:text-white">
+                <i class="bi bi-x-lg text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- FIXED LINKS FOR MOBILE -->
+        <ul class="flex flex-col gap-3 p-6 font-semibold text-blue-100">
+            <li>
+                <a asp-controller="Home" asp-action="Index" class="block px-4 py-3 rounded-xl hover:bg-blue-800">
+                    Home
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Aboutus" asp-action="Index" class="block px-4 py-3 rounded-xl hover:bg-blue-800">
+                    About
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Blog" asp-action="Index" class="block px-4 py-3 rounded-xl hover:bg-blue-800">
+                    Blog
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Contactus" asp-action="Index" class="block px-4 py-3 rounded-xl hover:bg-blue-800">
+                    Contact
+                </a>
+            </li>
+
+
+            <li class="flex gap-3">
+                <a asp-controller="Auth" asp-action="Login"
+                   class="px-3 py-1 rounded hover:bg-gray-700">
+                    Login & Sign Up
+                </a>
+
+                
+            </li>
+        </ul>
+    </div>
+
+    <!-- ================= SIDEBAR ================= -->
+   
+    <!-- ================= SCRIPT ================= -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenu = document.getElementById('close-menu');
+        const navMenu = document.getElementById('nav-menu');
+        const overlay = document.getElementById('overlay');
+
+        function openMenu() {
+            navMenu.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.classList.add('menu-open');
+        }
+
+        function closeMenuFunc() {
+            navMenu.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.classList.remove('menu-open');
+        }
+
+        menuToggle.addEventListener('click', openMenu);
+        closeMenu.addEventListener('click', closeMenuFunc);
+        overlay.addEventListener('click', closeMenuFunc);
+    </script>
+
+</body>
+</html> 

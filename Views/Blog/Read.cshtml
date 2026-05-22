@@ -1,0 +1,79 @@
+﻿@model mkinfotech.DTOs.Blog.BlogDto
+
+@{
+    ViewData["Title"] = Model?.Title ?? "Blog Post";
+
+    // Safely calculate initials for the user avatar bubble
+    string initials = "A";
+    if (Model != null && !string.IsNullOrWhiteSpace(Model.AuthorName))
+    {
+        var parts = Model.AuthorName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length > 0)
+        {
+            initials = parts.Length > 1
+                ? $"{parts[0][0]}{parts[parts.Length - 1][0]}".ToUpper()
+                : parts[0][0].ToString().ToUpper();
+        }
+    }
+}
+
+<div class="max-w-4xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+
+    <!-- Category Tag -->
+    <div class="mb-4">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 tracking-wide uppercase shadow-sm">
+            📁 @(Model?.CategoryName ?? "General")
+        </span>
+    </div>
+
+    <!-- Blog Title -->
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
+        @(Model?.Title ?? "Untitled Post")
+    </h1>
+
+    <!-- Author & Meta Section -->
+    <div class="flex items-center space-x-4 pb-8 mb-8 border-b border-gray-100">
+        <div class="flex-shrink-0">
+            <!-- Dynamic Avatar Bubble with gradient fallback -->
+            <div class="h-11 w-11 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-white">
+                @initials
+            </div>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-900 truncate">
+                By @(Model?.AuthorName ?? "Anonymous")
+            </p>
+            <p class="text-xs text-gray-500">
+                Published on @(Model?.CreatedAt.ToString("dd MMM yyyy") ?? DateTime.Now.ToString("dd MMM yyyy"))
+            </p>
+        </div>
+    </div>
+
+    <!-- Featured Image -->
+    @if (Model != null && !string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="mb-10 overflow-hidden rounded-2xl shadow-md border border-gray-100 bg-gray-50">
+            <img src="@Model.ImageUrl" alt="@Model.Title" class="w-full h-auto max-h-[480px] object-cover hover:scale-[1.01] transition-transform duration-300 ease-in-out" />
+        </div>
+    }
+
+    <!-- Main Content Body -->
+    <article class="prose prose-indigo prose-lg max-w-none text-gray-800 leading-relaxed tracking-normal mix-blend-normal">
+        @if (Model != null && !string.IsNullOrEmpty(Model.Content))
+        {
+            @Html.Raw(Model.Content)
+        }
+        else
+        {
+            <p class="text-gray-400 italic">This blog post has no content to display.</p>
+        }
+    </article>
+
+    <!-- Interaction Bar (Likes & Share) -->
+    
+    <p class="text-xs text-gray-500 mt-1">
+        👁 Views: @(Model?.ViewsCount ?? 0)
+    </p>
+      
+
+</div>

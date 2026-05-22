@@ -1,0 +1,43 @@
+name: Deploy to Staging VPS
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Staging Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+
+          script: |
+            set -e
+
+            echo "🚀 Staging deployment started"
+
+            cd /var/www/mkinfotech-staging
+
+            echo "🧹 Cleaning local changes..."
+            git reset --hard
+            git clean -fd
+
+            echo "📥 Pulling latest staging code..."
+            git pull origin staging
+
+            echo "🗑 Cleaning old publish..."
+            rm -rf publish/*
+
+            echo "📦 Publishing app..."
+            dotnet publish -c Release -o publish
+
+            echo "🔄 Restarting staging service..."
+            sudo systemctl restart mkinfotech-staging
+
+            echo "✅ Staging deployment completed"

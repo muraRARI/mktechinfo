@@ -1,0 +1,32 @@
+
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS using SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /var/www/mkinfotech-staging
+            echo "Syncing latest code..."
+            git fetch origin staging
+            git reset --hard origin/staging
+            echo "Cleaning publish folder..."
+            rm -rf publish/*
+            echo "Publishing app..."
+            dotnet publish -c Release -o publish
+            echo "Restarting service..."
+            systemctl restart mkinfotech-staging
+            echo "Deployment successful"

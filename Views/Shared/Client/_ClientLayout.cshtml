@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <title>Infotech MKTechWorld</title>
+
+    <script>
+        tailwind.config = {
+            prefix: 'tw-',
+            corePlugins: {
+                preflight: false
+            },
+            important: true
+        }
+    </script>
+
+    <partial name="_LibraryReferences" />
+
+    <!-- Site CSS -->
+</head>
+
+
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Header -->
+
+    <header>
+        @* <partial name="_Navbar" /> *@
+        @* <partial name="_SuperadminNavbar" /> *@
+        <partial name="~/Views/Shared/Client/_Clientnavbar.cshtml" />
+
+
+    </header>
+   @*  <header>
+       
+
+
+    </header> *@
+
+
+    <header>
+    </header>
+
+    @* <partial name="_Superadminsidenavar" />  *@
+    <!-- Main Content -->
+    <main role="main" class="flex-grow-1">
+        <div class="container py-4">
+            @RenderBody()
+        </div>
+    </main>
+   @*  <header>
+        <partial name="_Footer" />
+    </header> *@
+
+
+    <!-- Site JS -->
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
