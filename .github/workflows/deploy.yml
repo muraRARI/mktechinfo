@@ -1,5 +1,4 @@
-
-name: Deploy to VPS
+name: Deploy Staging
 
 on:
   push:
@@ -11,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to VPS using SSH
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -19,14 +18,17 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            cd /var/www/mkinfotech-staging
-            echo "Syncing latest code..."
+
+            cd /var/www/staging
+
+            echo "Pulling staging code..."
             git fetch origin staging
             git reset --hard origin/staging
-            echo "Cleaning publish folder..."
-            rm -rf publish/*
-            echo "Publishing app..."
+
+            echo "Publishing..."
             dotnet publish -c Release -o publish
-            echo "Restarting service..."
-            systemctl restart mkinfotech-staging
-            echo "Deployment successful"
+
+            echo "Restart staging service..."
+            sudo systemctl restart mkinfotech-staging.service
+
+            echo "Staging deployed successfully"
