@@ -104,7 +104,11 @@
 
     <!-- LOGIC APPLICATION SCRIPT -->
     <script>
-        const API = "/api/BlogPublic";
+        // const API = "/api/BlogPublic";
+
+
+        const API = "https://staging.infotech.mktechworld.co.in/api/BlogPublic";
+
         let page = 1;
         const pageSize = 6;
         let search = "";
@@ -185,6 +189,8 @@
             updateFilterStatusView();
 
             let url = `${API}/published/list?page=${page}&pageSize=${pageSize}`;
+
+
             if (search) url += `&search=${encodeURIComponent(search)}`;
             if (category) url += `&categoryId=${category}`;
 
