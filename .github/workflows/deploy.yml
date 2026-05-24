@@ -1,32 +1,82 @@
-
-name: Deploy to VPS
+name: CI/CD Deploy to VPS (Production + Staging)
 
 on:
   push:
     branches:
+      - main
       - staging
 
 jobs:
-  deploy:
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to VPS using SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -e
-            cd /var/www/mkinfotech-staging
-            echo "Syncing latest code..."
-            git fetch origin staging
-            git reset --hard origin/staging
-            echo "Cleaning publish folder..."
-            rm -rf publish/*
-            echo "Publishing app..."
-            dotnet publish -c Release -o publish
-            echo "Restarting service..."
-            systemctl restart mkinfotech-staging
-            echo "Deployment successful"
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Build Project
+      run: dotnet build --configuration Release
+
+    - name: Publish Project
+      run: dotnet publish -c Release -o publish
+
+
+  deploy-production:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to Production VPS
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        source: "publish/*"
+        target: "/var/www/production"
+
+    - name: Restart Production Service
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          sudo systemctl restart production.service
+          sudo systemctl status production.service
+
+
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to Staging VPS
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        source: "publish/*"
+        target: "/var/www/staging"
+
+    - name: Restart Staging Service
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          sudo systemctl restart staging.service
+          sudo systemctl status staging.service
