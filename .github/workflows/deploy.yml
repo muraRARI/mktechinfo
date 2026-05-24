@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: CI/CD Deploy to VPS (Production + Staging)
+=======
+name: Deploy Staging
+>>>>>>> 16669c603af57ba939d04fdeabfeee524793ac0e
 
 on:
   push:
@@ -12,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
     - name: Checkout Code
       uses: actions/checkout@v4
 
@@ -103,3 +108,27 @@ jobs:
         script: |
           sudo systemctl restart staging.service
           sudo systemctl status staging.service
+=======
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+
+            cd /var/www/staging
+
+            echo "Pulling staging code..."
+            git fetch origin staging
+            git reset --hard origin/staging
+
+            echo "Publishing..."
+            dotnet publish -c Release -o publish
+
+            echo "Restart staging service..."
+            sudo systemctl restart mkinfotech-staging.service
+
+            echo "Staging deployed successfully"
+>>>>>>> 16669c603af57ba939d04fdeabfeee524793ac0e
