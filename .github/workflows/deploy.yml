@@ -29,6 +29,13 @@ jobs:
     - name: Publish Project
       run: dotnet publish -c Release -o publish
 
+    # ✅ FIX 1: upload artifact
+    - name: Upload Publish Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: publish
+        path: publish/
+
 
   deploy-production:
     needs: build
@@ -36,6 +43,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    # ✅ FIX 2: download artifact
+    - name: Download Publish Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: publish
+        path: publish
+
     - name: Deploy to Production VPS
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -62,6 +77,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    # ✅ FIX 2: download artifact
+    - name: Download Publish Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: publish
+        path: publish
+
     - name: Deploy to Staging VPS
       uses: appleboy/scp-action@v0.1.7
       with:
