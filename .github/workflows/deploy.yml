@@ -1,9 +1,9 @@
-name: Deploy Staging
+name: Deploy Production
 
 on:
   push:
     branches:
-      - staging
+      - main
 
 jobs:
   deploy:
@@ -27,21 +27,21 @@ jobs:
     - name: Publish Project
       run: dotnet publish -c Release -o publish
 
-    - name: Deploy to Staging VPS
+    - name: Deploy to Production VPS
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         source: "publish/*"
-        target: "/var/www/staging"
+        target: "/var/www/production"
 
-    - name: Restart Staging Service
+    - name: Restart Production Service
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          sudo systemctl restart staging.service
-          sudo systemctl status staging.service
+          sudo systemctl restart infotech.service
+          sudo systemctl status infotech.service
