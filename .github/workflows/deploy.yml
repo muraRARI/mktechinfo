@@ -67,8 +67,8 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          sudo systemctl restart production.service
-          sudo systemctl status production.service
+          sudo systemctl restart infotech.service
+          sudo systemctl status infotech.service
 
 
   deploy-staging:
