@@ -34,7 +34,8 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         source: "publish/*"
-        target: "/var/www/staging"
+        target: "/var/www/staging/publish"
+       
 
     - name: Restart Staging Service
       uses: appleboy/ssh-action@v1.0.3
