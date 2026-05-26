@@ -10,25 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -e
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-            cd /var/www/staging
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
 
-            echo "Pulling staging code..."
-            git fetch origin staging
-            git reset --hard origin/staging
+    - name: Restore Dependencies
+      run: dotnet restore
 
-            echo "Publishing..."
-            dotnet publish -c Release -o publish
+    - name: Build Project
+      run: dotnet build mkinfotech.csproj --configuration Release
 
-            echo "Restart staging service..."
-            sudo systemctl restart mkinfotech-staging.service
+    - name: Publish Project
+      run: dotnet publish mkinfotech.csproj -c Release -o publish
 
-            echo "Staging deployed successfully"
+    - name: Deploy to Staging VPS
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        source: "publish/*"
+        target: "/var/www/staging/publish"
+       
+
+    - name: Restart Staging Service
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          sudo systemctl restart staging.service
+          sudo systemctl status staging.service --no-pager
