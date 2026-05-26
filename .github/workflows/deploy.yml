@@ -18,31 +18,18 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore Dependencies
+    - name: Restore
       run: dotnet restore
 
-    - name: Build Project
-      run: dotnet build mkinfotech.csproj --configuration Release
-
-    - name: Publish Project
+    - name: Publish
       run: dotnet publish mkinfotech.csproj -c Release -o publish
 
-    - name: Deploy to Staging VPS
+    - name: Deploy to VPS (Clean + Copy)
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         source: "publish/*"
-        target: "/var/www/staging/publish"
-       
-
-    - name: Restart Staging Service
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USERNAME }}
-        key: ${{ secrets.VPS_SSH_KEY }}
-        script: |
-          sudo systemctl restart staging.service
-          sudo systemctl status staging.service --no-pager
+        target: "/var/www/staging/"
+        rm: true   # 🔥 IMPORTANT: removes old files
