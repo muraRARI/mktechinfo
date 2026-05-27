@@ -61,10 +61,11 @@ public class BlogController : Controller
     public async Task<IActionResult> Read(string slug)
     {
         using var client = new HttpClient();
-
+        //const API_BASE_URL = '/api/ApiBlogcategory';
         var response = await client.GetAsync(
         $"https://localhost:44394/api/BlogPublic/slug/{slug}"
 
+        //$"api/BlogPublic/slug/{slug}"
 
         );
 
