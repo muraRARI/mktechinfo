@@ -36,6 +36,7 @@ using Microsoft.AspNetCore.Mvc;
 using mkinfotech.DTOs.Blog;
 using Npgsql;
 using System.Data;
+using System.Security.AccessControl;
 using System.Text.Json;
 
 [Route("blog")]
@@ -61,9 +62,12 @@ public class BlogController : Controller
     public async Task<IActionResult> Read(string slug)
     {
         using var client = new HttpClient();
-        //const API_BASE_URL = '/api/ApiBlogcategory';
+        ////const API_BASE_URL = '/api/ApiBlogcategory';
+
+        const baseApiUrl = "/api/BlogApi";
         var response = await client.GetAsync(
-        $"https://localhost:44394/api/BlogPublic/slug/{slug}"
+        $"baseApiUrl/api/BlogPublic/slug/{slug}"
+
 
         //$"api/BlogPublic/slug/{slug}"
 

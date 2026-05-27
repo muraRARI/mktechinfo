@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\areas\\superadmin\\views\\blog\\list.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:areas\\superadmin\\views\\blog\\list.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\areas\\superadmin\\views\\blog\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:areas\\superadmin\\views\\blog\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\areas\\superadmin\\views\\blog\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:areas\\superadmin\\views\\blog\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\views\\blog\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:views\\blog\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\controllers\\blogcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:controllers\\blogcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\views\\blog\\read.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:views\\blog\\read.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\areas\\superadmin\\views\\blogcategory\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -13,14 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\areas\\superadmin\\controllers\\blogcategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:areas\\superadmin\\controllers\\blogcategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\views\\blog\\read.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:views\\blog\\read.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|c:\\users\\bhave\\source\\repos\\mkinfotechbackend\\views\\blog\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{54EEEE95-9A0A-471E-93FC-8C9699EBF16A}|mkinfotech.csproj|solutionrelative:views\\blog\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -43,6 +55,45 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\Blog\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Superadmin\\Views\\Blog\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\Blog\\Edit.cshtml",
+              "RelativeToolTip": "Areas\\Superadmin\\Views\\Blog\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T04:06:23.609Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\Blog\\Create.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Superadmin\\Views\\Blog\\Create.cshtml",
+              "ToolTip": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\Blog\\Create.cshtml",
+              "RelativeToolTip": "Areas\\Superadmin\\Views\\Blog\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T04:06:19.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "List.cshtml",
+              "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\Blog\\List.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Superadmin\\Views\\Blog\\List.cshtml",
+              "ToolTip": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\Blog\\List.cshtml",
+              "RelativeToolTip": "Areas\\Superadmin\\Views\\Blog\\List.cshtml",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAAAJkAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T04:01:49.612Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Views\\BlogCategory\\Create.cshtml",
               "RelativeDocumentMoniker": "Areas\\Superadmin\\Views\\BlogCategory\\Create.cshtml",
@@ -50,12 +101,11 @@
               "RelativeToolTip": "Areas\\Superadmin\\Views\\BlogCategory\\Create.cshtml",
               "ViewState": "AgIAAG0AAAAAAAAAAAAUwH0AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-27T03:52:57.293Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-27T03:52:57.293Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "BlogCategoryController.cs",
               "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Areas\\Superadmin\\Controllers\\BlogCategoryController.cs",
               "RelativeDocumentMoniker": "Areas\\Superadmin\\Controllers\\BlogCategoryController.cs",
@@ -63,12 +113,11 @@
               "RelativeToolTip": "Areas\\Superadmin\\Controllers\\BlogCategoryController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T03:52:40.245Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-27T03:52:40.245Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Read.cshtml",
               "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Views\\Blog\\Read.cshtml",
               "RelativeDocumentMoniker": "Views\\Blog\\Read.cshtml",
@@ -81,26 +130,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Views\\Blog\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Blog\\Index.cshtml",
               "ToolTip": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Views\\Blog\\Index.cshtml",
               "RelativeToolTip": "Views\\Blog\\Index.cshtml",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAAAGwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAE0BAAAAAAAAAAAAAHEAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-05-27T03:49:01.287Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "BlogController.cs",
               "DocumentMoniker": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Controllers\\BlogController.cs",
               "RelativeDocumentMoniker": "Controllers\\BlogController.cs",
-              "ToolTip": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Controllers\\BlogController.cs",
-              "RelativeToolTip": "Controllers\\BlogController.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAIwEMAAAAnAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\bhave\\source\\repos\\mkinfotechbackend\\Controllers\\BlogController.cs*",
+              "RelativeToolTip": "Controllers\\BlogController.cs*",
+              "ViewState": "AgIAADgAAAAAAAAAAAAAADgAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-27T03:48:44.756Z",
               "EditorCaption": ""
