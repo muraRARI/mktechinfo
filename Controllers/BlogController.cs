@@ -63,8 +63,7 @@ public class BlogController : Controller
         using var client = new HttpClient();
 
         var response = await client.GetAsync(
-            ////$"https://localhost:44394/api/BlogPublic/slug/{slug}"
-            $"https://staging.infotech.mktechworld.co.in/api/BlogPublic/{slug}"
+        $"https://localhost:44394/api/BlogPublic/slug/{slug}"
 
 
         );

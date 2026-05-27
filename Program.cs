@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -50,10 +51,11 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-   
+
 
 builder.Services.AddAuthorization();
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
 //app.UseForwardedHeaders(new ForwardedHeadersOptions
 //{
@@ -61,12 +63,15 @@ var app = builder.Build();
 //                       ForwardedHeaders.XForwardedProto
 //});
 // Exception handling
+
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+app.UseSwagger();
+object value = app.UseSwaggerUI();
 app.UseHttpsRedirection();   // ✅ IMPORTANT
 app.UseStaticFiles();
 
