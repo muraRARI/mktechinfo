@@ -24,12 +24,34 @@ jobs:
     - name: Publish
       run: dotnet publish mkinfotech.csproj -c Release -o publish
 
-    - name: Deploy to VPS (Clean + Copy)
+    - name: Create Archive
+      run: |
+        tar -czf staging.tar.gz -C publish .
+
+    - name: Upload Archive
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
-        source: "publish/*"
-        target: "/var/www/staging/"
-        rm: true   # 🔥 IMPORTANT: removes old files
+        source: "staging.tar.gz"
+        target: "/tmp/"
+
+    - name: Deploy on VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          mkdir -p /var/www/staging
+
+          systemctl stop staging.service
+
+          rm -rf /var/www/staging/*
+
+          tar -xzf /tmp/staging.tar.gz -C /var/www/staging
+
+          chmod -R 755 /var/www/staging
+
+          systemctl start staging.service
