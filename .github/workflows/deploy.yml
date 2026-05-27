@@ -27,13 +27,24 @@ jobs:
     - name: Publish Project
       run: dotnet publish mkinfotech.csproj -c Release -o publish
 
+    # 🔥 CLEAN VPS FOLDER BEFORE DEPLOY (IMPORTANT FIX)
+    - name: Clean VPS Publish Folder
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          sudo systemctl stop infotech.service
+          rm -rf /var/www/production/publish/*
+
     - name: Deploy to Production VPS
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
-        source: "publish/*"
+        source: "publish/"
         target: "/var/www/production/publish"
 
     - name: Restart Production Service
@@ -44,5 +55,5 @@ jobs:
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
           sudo systemctl daemon-reload
-          sudo systemctl restart infotech.service
+          sudo systemctl start infotech.service
           sudo systemctl status infotech.service
