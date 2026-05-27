@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Publish Project
-      run: dotnet publish -c Release -o publish
+      run: dotnet publish mkinfotech.csproj -c Release -o publish
 
     - name: Deploy to Production VPS
       uses: appleboy/scp-action@v0.1.7

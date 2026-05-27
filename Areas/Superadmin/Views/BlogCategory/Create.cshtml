@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Category Management</title>
-    <!-- Tailwind CSS for modern styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for clean iconography -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SweetAlert2 for modern popup alerts -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @{
+        Layout = "~/Views/Shared/Superadmin/_SuperadminLayout.cshtml";
+        ViewData["Title"] = "Create Blog";
+    }
+    
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
@@ -92,7 +91,6 @@
     </div>
 
     <!-- jQuery Hookup -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         // Update this pointing to your API endpoint
         const API_BASE_URL = '/api/ApiBlogcategory';

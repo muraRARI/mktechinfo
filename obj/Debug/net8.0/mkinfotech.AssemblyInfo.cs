@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("mkinfotech")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e25675c511760e975af0c0543f3f15ea912cd66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43f1988bf59748915820b471ac54f809c1874f51")]
 [assembly: System.Reflection.AssemblyProductAttribute("mkinfotech")]
 [assembly: System.Reflection.AssemblyTitleAttribute("mkinfotech")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

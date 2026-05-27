@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 namespace mkinfotech.Controllers.Api
 {
     // FIX 1: Use an explicit string route to guarantee matching without case-sensitivity or naming bugs
+    [Area("SuperAdmin")]
     [Route("api/BlogApi")]
     [ApiController]
     public class BlogApiController : BaseApiController
@@ -166,7 +167,9 @@ namespace mkinfotech.Controllers.Api
 
 
 
-
+        //[Authorize]
+        //[HttpGet("Superadminlist/list")]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpGet("admin/list")]
         public async Task<IActionResult> GetAdminBlogs(
     int page = 1,

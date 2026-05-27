@@ -36,14 +36,21 @@ using Microsoft.AspNetCore.Mvc;
 using mkinfotech.DTOs.Blog;
 using Npgsql;
 using System.Data;
+using System.Security.AccessControl;
 using System.Text.Json;
 
 [Route("blog")]
 public class BlogController : Controller
 {
 
+    private readonly IConfiguration _config;
 
- 
+    public BlogController(IConfiguration config)
+    {
+        _config = config;
+    }
+
+
     [HttpGet("")]
     public IActionResult Index()
     {
@@ -57,17 +64,20 @@ public class BlogController : Controller
     //    return View();
     //}
 
+
     [HttpGet("{slug}")]
     public async Task<IActionResult> Read(string slug)
     {
+        if (string.IsNullOrWhiteSpace(slug))
+            return NotFound();
+
+        var baseUrl = _config["ApiSettings:BaseUrl"];
+
+        var url = $"{baseUrl}/api/BlogPublic/slug/{slug}";
+
         using var client = new HttpClient();
 
-        var response = await client.GetAsync(
-            ////$"https://localhost:44394/api/BlogPublic/slug/{slug}"
-            $"https://staging.infotech.mktechworld.co.in/api/BlogPublic/{slug}"
-
-
-        );
+        var response = await client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
             return NotFound();
@@ -83,6 +93,35 @@ public class BlogController : Controller
 
         return View(result?.Data);
     }
+    //[HttpGet("{slug}")]
+    //public async Task<IActionResult> Read(string slug)
+    //{
+    //    using var client = new HttpClient();
+    //    ////const API_BASE_URL = '/api/ApiBlogcategory';
+
+    //    const baseApiUrl = "/api/BlogApi";
+    //    var response = await client.GetAsync(
+    //    $"baseApiUrl/api/BlogPublic/slug/{slug}"
+
+
+    //    //$"api/BlogPublic/slug/{slug}"
+
+    //    );
+
+    //    if (!response.IsSuccessStatusCode)
+    //        return NotFound();
+
+    //    var json = await response.Content.ReadAsStringAsync();
+
+    //    var result = JsonSerializer.Deserialize<ApiResponseDto<BlogDto>>(
+    //        json,
+    //        new JsonSerializerOptions
+    //        {
+    //            PropertyNameCaseInsensitive = true
+    //        });
+
+    //    return View(result?.Data);
+    //}
 
 
 }
