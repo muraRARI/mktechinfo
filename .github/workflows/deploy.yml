@@ -18,38 +18,22 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore Dependencies
+    - name: Restore
       run: dotnet restore
 
-    - name: Build Project
-      run: dotnet build --configuration Release
-
-    - name: Publish Project
+    - name: Publish
       run: dotnet publish mkinfotech.csproj -c Release -o publish
 
-    # 🔥 STOP SERVICE FIRST (safe deploy)
-    - name: Stop Service
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USERNAME }}
-        key: ${{ secrets.VPS_SSH_KEY }}
-        script: |
-          sudo systemctl stop infotech.service
-          rm -rf /var/www/production/publish/*
-
-    # 🔥 COPY FULL FOLDER (IMPORTANT FIX)
-    - name: Deploy to VPS
+    - name: Deploy to VPS (Clean + Copy)
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
-        source: "publish/"
+        source: "publish/*"
         target: "/var/www/production/publish"
-
-    # 🔥 START SERVICE CLEAN
-    - name: Start Service
+        rm: true   # 🔥 IMPORTANT: removes old files
+       name: Restart Production Service
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -57,5 +41,7 @@ jobs:
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
           sudo systemctl daemon-reload
-          sudo systemctl start infotech.service
+          sudo systemctl restart infotech.service
           sudo systemctl status infotech.service
+
+
